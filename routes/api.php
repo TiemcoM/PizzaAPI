@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PizzaController;
@@ -29,4 +30,6 @@ use App\Http\Controllers\Api\AuthController;
         Route::post('/createpizza', [PizzaController::class, 'createPizza']);
         Route::put('/updatepizza/{id}', [PizzaController::class, 'updatePizza']);
         Route::delete('/deletepizza/{id}', [PizzaController::class, 'deletePizza']);
+        Route::get('/getallusers', [UserController::class, 'getAllUsers']);
+        Route::get('/getuser/{id}', [UserController::class, 'getUser']);
     });
