@@ -17,19 +17,23 @@ use App\Http\Controllers\Api\AuthController;
 |
 */
 
-    Route::prefix('auth')->group(function () {
-        Route::post('login', [AuthController::class, 'login']);
-        Route::post('signup', [AuthController::class, 'signup']);
-    });
-    Route::group([
-        'middleware' => 'auth:api'
-    ], function () {
-        Route::post('auth/logout', [AuthController::class, 'logout']);
-        Route::get('/getallpizzas', [PizzaController::class, 'getAllPizzas']);
-        Route::get('/getpizza/{id}', [PizzaController::class, 'getPizza']);
-        Route::post('/createpizza', [PizzaController::class, 'createPizza']);
-        Route::put('/updatepizza/{id}', [PizzaController::class, 'updatePizza']);
-        Route::delete('/deletepizza/{id}', [PizzaController::class, 'deletePizza']);
-        Route::get('/getallusers', [UserController::class, 'getAllUsers']);
-        Route::get('/getuser/{id}', [UserController::class, 'getUser']);
-    });
+Route::prefix('auth')->group(function () {
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('signup', [AuthController::class, 'signup']);
+});
+Route::group([
+    'middleware' => 'auth:api'
+], function () {
+    Route::post('auth/logout', [AuthController::class, 'logout']);
+    Route::get('/getallpizzas', [PizzaController::class, 'getAllPizzas']);
+    Route::get('/getpizza/{id}', [PizzaController::class, 'getPizza']);
+    Route::post('/createpizza', [PizzaController::class, 'createPizza']);
+    Route::put('/updatepizza/{id}', [PizzaController::class, 'updatePizza']);
+    Route::delete('/deletepizza/{id}', [PizzaController::class, 'deletePizza']);
+
+});
+
+Route::group(['middleware' => ['auth:api', 'role:admin']], function () {
+    Route::get('/getallusers', [UserController::class, 'getAllUsers']);
+    Route::get('/getuser/{id}', [UserController::class, 'getUser']);
+});
