@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
 
         $request->validate([
             'email' => 'required|string',
@@ -19,9 +20,9 @@ class AuthController extends Controller
 
         $credentials = request(['email', 'password']);
 
-        if(!Auth::attempt($credentials)){
+        if (!Auth::attempt($credentials)) {
             return response()->json([
-                'message'=> 'Invalid email or password'
+                'message' => 'Invalid email or password'
             ], 401);
         }
 
@@ -32,11 +33,12 @@ class AuthController extends Controller
         $user->access_token = $token->accessToken;
 
         return response()->json([
-            "user"=>$user
+            "user" => $user
         ], 200);
     }
 
-    public function signup(Request $request){
+    public function signup(Request $request)
+    {
 
         $request->validate([
             'name' => 'required|string',
@@ -45,12 +47,13 @@ class AuthController extends Controller
         ]);
 
         $user = new User([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=>bcrypt($request->password)
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
         ]);
 
         $user->save();
+        $user->attachRole('user');
 
         return response()->json([
             "message" => "User registered successfully"
@@ -58,14 +61,16 @@ class AuthController extends Controller
 
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         $request->user()->token()->revoke();
         return response()->json([
-            "message"=>"User logged out successfully"
+            "message" => "User logged out successfully"
         ], 200);
     }
 
-    public function index(){
+    public function index()
+    {
         echo "Hello World";
     }
 
